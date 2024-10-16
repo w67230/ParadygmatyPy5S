@@ -1,6 +1,6 @@
 from collections import deque
 
-def bfsSciezka(graph, start, end):
+def bfsSciezka(graph : dict, start, end):
     queue = deque([[start]]);
     visited = set();
 
@@ -18,3 +18,15 @@ def bfsSciezka(graph, start, end):
             visited.add(node);
 
     return None;
+
+
+graf = {
+    'A' : ['B', 'C', 'D'],
+    'B' : ['A'],
+    'C' : ['A', 'E'],
+    'D' : ['A', 'F'],
+    'E' : ['C', 'F'],
+    'F' : ['D', 'E']
+}
+
+print(bfsSciezka(graf, 'A', 'F'));
