@@ -1,3 +1,4 @@
+import numpy
 import string
 
 
@@ -7,17 +8,20 @@ def wykonajOperacje(operacja : string):
 
 
 
+A = numpy.array(
+    [
+        [2],
+        [3],
+        [5]
+    ]
+);
 
-A = [
-    [2],
-    [3],
-    [5]
-];
+B = numpy.array(
+    [
+        [1, 4, 8]
+    ]
+);
 
-B = [
-    [1, 4, 8]
-];
-
-print(wykonajOperacje("A+B"));
+print(wykonajOperacje("A*B"));
 
 
