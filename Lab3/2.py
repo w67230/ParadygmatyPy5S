@@ -1,4 +1,5 @@
 import string
+import json
 from abc import ABC
 from abc import abstractmethod
 
@@ -46,8 +47,11 @@ class FrontendManager(ABC):
 
 
 class EmployeeManager(FrontendManager):
-    def __init__(self):
+    def __init__(self, login : string, haslo : string):
+        if(login != "admin" and haslo != "admin"):
+            raise ValueError("Niepoprawne haslo lub login");
         self.__listaPracownikow = [];
+        self.readFromJsonFile();
 
 
     def getListaPracownikow(self):
@@ -55,6 +59,7 @@ class EmployeeManager(FrontendManager):
 
     def addEmployeeToList(self, employee : Employee):
         self.getListaPracownikow().append(employee);
+        self.saveToJsonFile();
 
     def printListaPracownikow(self):
         i = 1;
@@ -67,6 +72,7 @@ class EmployeeManager(FrontendManager):
         for i in range(len(lista)-1, -1, -1):
             if(lista[i].getAge() > odWieku and lista[i].getAge() < doWieku):
                 lista.remove(lista[i]);
+        self.saveToJsonFile();
     '''odWieku i doWieku jest exclusive'''
 
     def wyszukajPracownika(self, nazwa : string):
@@ -80,13 +86,39 @@ class EmployeeManager(FrontendManager):
         pracownik = self.wyszukajPracownika(nazwaPracownika);
         if(pracownik != None):
             pracownik.salary = noweWynagrodzenie;
+        self.saveToJsonFile();
+
+
+    def saveToJsonFile(self):
+        forJson = [];
+        for x in self.getListaPracownikow():
+            forJson.append(json.dumps({
+                "name": x.getName(),
+                "age": x.getAge(),
+                "salary": x.getSalary()
+            }));
+        f = open("dane.json", "w");
+        f.write(json.dumps(forJson));
+        f.close();
+
+    def readFromJsonFile(self):
+        f = open("dane.json", "r");
+        jsonStr = f.read();
+        jsonArr = json.loads(jsonStr);
+        for x in jsonArr:
+            employee = json.loads(x);
+            self.getListaPracownikow().append(Employee(employee["name"], employee["age"], employee["salary"]));
+        f.close();
 
 
 
-manager = EmployeeManager();
-manager.addEmployeeToList(Employee("Ukasz Fryc", 22, 20.0));
-manager.addEmployeeToList(Employee("Frycasz Uk", 44, 2000.30));
-manager.addEmployeeToList(Employee("Ktos Tam", 28, 4462.0));
+
+
+manager = EmployeeManager("admin", "admin");
+#manager.addEmployeeToList(Employee("Ukasz Fryc", 22, 20.0));
+#manager.addEmployeeToList(Employee("Frycasz Uk", 44, 2000.30));
+#manager.addEmployeeToList(Employee("Ktos Tam", 28, 4462.0));
+
 
 employee = manager.wyszukajPracownika("Ktos Tam");
 if(employee != None):
@@ -103,7 +135,4 @@ if(employee != None):
     print(f"Znaleziono pracownika: {employee.getName()}, lat {employee.getAge()}, ktory zarabia {employee.getSalary()}zl");
 else:
     print("Nie znaleziono pracownika");
-
-
-
 
