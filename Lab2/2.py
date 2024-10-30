@@ -1,9 +1,16 @@
 import numpy
+from numpy import transpose
 import string
 
 
 def wykonajOperacje(operacja : string):
-    return eval(operacja);
+    try:
+        wynik = eval(operacja);
+    except ValueError:
+        print("Niepoprawna operacja");
+        wynik = [];
+
+    return wynik;
 
 
 
@@ -22,6 +29,6 @@ B = numpy.array(
     ]
 );
 
-print(wykonajOperacje("A*B"));
+print(wykonajOperacje("transpose(A) * B"));
 
 
