@@ -40,7 +40,8 @@ def wybierzNajwartosciowszePrzedmiotyWedlugStosunku(listaPrzedmiotow: list, poje
                 ostatecznaLista.append(element)
                 zapelnienie += element[0]
                 if zapelnienie == pojemnoscPlecaka:
-                    break  # unikniecie niepotrzebnych obliczen po zapelnieniu plecaka
+                    # unikniecie niepotrzebnych obliczen po zapelnieniu plecaka
+                    return sumaListyKrotek(ostatecznaLista, 1), ostatecznaLista
 
     return sumaListyKrotek(ostatecznaLista, 1), ostatecznaLista
 
